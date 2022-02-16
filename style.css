@@ -1,0 +1,41 @@
+#run-ai {
+    background-color: greenyellow;
+
+    position: absolute;
+
+    right: 1em;
+    top: 5em;
+
+    height: 4em;
+    width: 7em;
+
+    border-radius: 5px;
+
+    transition: 0.5s;
+}
+
+#run-ai::before {
+    content: "Run AI";
+    color: rgb(0, 100, 100);
+}
+
+#run-ai:hover {
+    transform: scale(1.05);
+}
+
+#run-ai[disabled] {
+    background-color: rgb(240, 240, 240);
+}
+
+#run-ai[disabled]:hover {
+    transform: unset;
+}
+
+#run-ai[disabled]::before {
+    content: "Board full";
+}
+
+#run-ai.running::before {
+    content: "Running...";
+    color: white;
+}

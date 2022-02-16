@@ -1,0 +1,21 @@
+{
+    "name": "Wordle AI",
+    "description": "An AI designed to win Wordle",
+    "version": "1.0.0",
+    "manifest_version": 3,
+    "content_scripts": [
+        {
+            "run_at": "document_end",
+            "css": ["style.css"],
+            "js": ["ai.js"],
+            "matches": ["https://www.nytimes.com/games/wordle/*"]
+        }
+    ],
+    "web_accessible_resources": [
+        {
+            "resources": ["words.txt"],
+            "matches": ["<all_urls>"],
+            "extension_ids": []
+        }
+    ]
+}

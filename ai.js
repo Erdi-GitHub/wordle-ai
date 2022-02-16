@@ -1,14 +1,3 @@
-/**
- * 
- * @param {string} str 
- * @param {number} i 
- * @param {string} replaceWith 
- * @returns 
- */
-function replaceAt(str, i, replaceWith) {
-    return str.substring(0, i) + replaceWith + str.substring(i + replaceWith.length);
-}
-
 fetch(chrome.runtime.getURL("words.txt")).then(async res => await res.text()).then(words => words.split("\n")).then(words => {
     const run = document.createElement("button");
     run.id = "run-ai";
@@ -37,8 +26,6 @@ fetch(chrome.runtime.getURL("words.txt")).then(async res => await res.text()).th
     }
 
     function runAi() {
-        var previous = "";
-
         var row = 0;
 
         const contains = [];

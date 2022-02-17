@@ -37,7 +37,7 @@ fetch(chrome.runtime.getURL("words.txt")).then(async res => await res.text()).th
             setTimeout(() => {
                 const state = getState();
 
-                if(noWord || state.gameStatus !== "IN_PROGRESS") 
+                if(noWord || !canRun(state)) 
                     return run.classList.remove("running");
 
                 try {
@@ -60,6 +60,9 @@ fetch(chrome.runtime.getURL("words.txt")).then(async res => await res.text()).th
                         switch(evaluation) {
                         case "correct":
                             correct.push(letter);
+
+                            delete contains[contains.indexOf(letter)];
+                            
                             break;
                         case "present":
                             correct.push(".");
@@ -70,32 +73,21 @@ fetch(chrome.runtime.getURL("words.txt")).then(async res => await res.text()).th
                         case undefined: break;
                         default:
                             correct.push(".");
-                            if(
-                                !correct.includes(letter) &&
-                                !contains.includes(letter) &&
-                                !notContain.includes(letter)
-                            )
+                            if(!notContain.includes(letter))
                                 notContain.push(letter);
                         }
                     }
 
                     const correctRegex = new RegExp(correct.join(""));
-                    const correctLetters = Array.from(correct).filter(letter => letter !== ".");
 
-                    const word = words.find(el =>
+                    const word = words.find(el => 
                         !boardState.includes(el) &&
                         correctRegex.test(el) &&
-                        el.split("").filter(letter => {
-                            const index = correctLetters.indexOf(letter);
-                            if(index < 0) return true;
-                            
-                            correctLetters.splice(index, 1);
-
-                            return false;
-                        }).every(letter => 
-                            notContain.length ? !notContain.includes(letter) : true &&
-                            contains.length ? contains.includes(letter) : true
-                        )
+                        (el = Array.from(el.split("").entries()).filter(([i, el]) => 
+                            correct[i] !== el
+                        ).map(([, el]) => el)) &&
+                        contains.every(letter => el.includes(letter)) &&
+                        !notContain.some(letter => el.includes(letter))
                     );
 
                     enterWord(word);

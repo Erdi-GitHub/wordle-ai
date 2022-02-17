@@ -73,7 +73,7 @@ fetch(chrome.runtime.getURL("words.txt")).then(async res => await res.text()).th
                         case undefined: break;
                         default:
                             correct.push(".");
-                            if(!notContain.includes(letter))
+                            if(!contains.includes(letter) && !notContain.includes(letter))
                                 notContain.push(letter);
                         }
                     }

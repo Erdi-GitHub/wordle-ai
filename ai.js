@@ -61,19 +61,19 @@ fetch(chrome.runtime.getURL("words.txt")).then(async res => await res.text()).th
                         case "correct":
                             correct.push(letter);
 
-                            delete contains[contains.indexOf(letter)];
+                            delete contains[contains.findIndex(el => el.letter === letter)];
                             
                             break;
                         case "present":
                             correct.push(".");
-                            if(!contains.includes(letter))
-                                contains.push(letter);
+                            if(!contains.some(el => el.letter === letter))
+                                contains.push({ letter, index: i });
 
                             break;
                         case undefined: break;
                         default:
                             correct.push(".");
-                            if(!contains.includes(letter) && !notContain.includes(letter))
+                            if(!contains.some(el => el.letter === letter) && !notContain.includes(letter))
                                 notContain.push(letter);
                         }
                     }
@@ -83,11 +83,17 @@ fetch(chrome.runtime.getURL("words.txt")).then(async res => await res.text()).th
                     const word = words.find(el => 
                         !boardState.includes(el) &&
                         correctRegex.test(el) &&
-                        (el = Array.from(el.split("").entries()).filter(([i, el]) => 
-                            correct[i] !== el
-                        ).map(([, el]) => el)) &&
-                        contains.every(letter => el.includes(letter)) &&
-                        !notContain.some(letter => el.includes(letter))
+                        (el = Array.from(el.split("").entries()).map(([i, el]) => 
+                            correct[i] !== el ? el : null
+                        )) &&
+                        !notContain.some(letter => el.includes(letter)) &&
+                        contains.every(({ letter, index }) => {
+                            if(letter === null) return true;
+
+                            const indexOfLetter = el.indexOf(letter);
+
+                            return indexOfLetter !== -1 && indexOfLetter !== index;
+                        })
                     );
 
                     enterWord(word);

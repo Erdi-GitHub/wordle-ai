@@ -83,7 +83,7 @@ fetch(chrome.runtime.getURL("words.txt")).then(async res => await res.text()).th
                     const word = words.find(el => 
                         !boardState.includes(el) &&
                         correctRegex.test(el) &&
-                        (el = Array.from(el.split("").entries()).map(([i, el]) => 
+                        (el = el.split("").map(el => 
                             correct[i] !== el ? el : null
                         )) &&
                         !notContain.some(letter => el.includes(letter)) &&

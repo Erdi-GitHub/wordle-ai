@@ -61,7 +61,7 @@ fetch(chrome.runtime.getURL("words.txt")).then(async res => await res.text()).th
                         case "correct":
                             correct.push(letter);
 
-                            delete contains[contains.findIndex(el => el.letter === letter)];
+                            delete contains[contains.findIndex(el => el && el.letter === letter)];
                             
                             break;
                         case "present":
